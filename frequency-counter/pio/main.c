@@ -16,17 +16,17 @@ int32_t pulseCount = 0;
 int dma_chan = 0;
 int dma_chan2 = 0;
 
-void pps_callback(uint gpio, uint32_t events) {
-    pulseCountSnapshot = pulseCount;
-    ppsTime = get_absolute_time();
-    ppsFlag = 1;
-}
+// void pps_callback(uint gpio, uint32_t events) {
+//     pulseCountSnapshot = pulseCount;
+//     ppsTime = get_absolute_time();
+//     ppsFlag = 1;
+// }
 
-void pps_manual() {
-    pulseCountSnapshot = pulseCount;
-    ppsTime = get_absolute_time();
-    ppsFlag = 1;
-}
+// void pps_manual() {
+//     pulseCountSnapshot = pulseCount;
+//     ppsTime = get_absolute_time();
+//     ppsFlag = 1;
+// }
 
 // setup pps timer callback
 bool pps_timer_callback() {
@@ -86,10 +86,10 @@ int main() {
 
     // setup PPS
     // the PPS signal is the trigger to get a snapshot of the time / pulse counters
-    gpio_init(PPS_PIN);
-    gpio_set_dir(PPS_PIN, GPIO_IN);
-    gpio_pull_down(PPS_PIN);
-    gpio_set_irq_enabled_with_callback(PPS_PIN, 0x08, 1, pps_callback);
+    // gpio_init(PPS_PIN);
+    // gpio_set_dir(PPS_PIN, GPIO_IN);
+    // gpio_pull_down(PPS_PIN);
+    // gpio_set_irq_enabled_with_callback(PPS_PIN, 0x08, 1, pps_callback);
 
     uint32_t seconds = 0;
     uint32_t prevCount = 0;

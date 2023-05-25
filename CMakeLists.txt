@@ -33,6 +33,7 @@ add_compile_options(-Wall
 
 # Hardware-specific examples in subdirectories:
 add_subdirectory(pio-squarewave)
+add_subdirectory(gpio_squarewave)
 add_subdirectory(frequency-counter)
 # add_subdirectory(adc)
 # add_subdirectory(clocks)
