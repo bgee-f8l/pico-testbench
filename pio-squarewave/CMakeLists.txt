@@ -7,6 +7,7 @@ pico_generate_pio_header(pio_squarewave ${CMAKE_CURRENT_LIST_DIR}/squarewave_fas
 target_sources(pio_squarewave PRIVATE squarewave.c)
 
 target_link_libraries(pio_squarewave PRIVATE pico_stdlib hardware_pio)
+
 pico_add_extra_outputs(pio_squarewave)
 
 # add url via pico_set_program_url

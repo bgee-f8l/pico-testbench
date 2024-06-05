@@ -1,0 +1,20 @@
+.program controlled_squarewave
+
+; Configure 'x' to set delay, and 'y' to set number of pulses
+;
+; OUT pins, 1        ; Output one bit to the set pins
+; SET x, <value>     ; Set 'x' for the delay cycle count
+; SET y, <value>     ; Set 'y' for pulse count
+
+square_loop:
+    pull block        ; Wait for new 'x' and 'y' values if FIFO is empty
+    mov x, osr        ; Move 'x' value from OSR to 'x'
+    pull block        ; Pull next value for 'y'
+    mov y, osr        ; Move 'y' value from OSR to 'y'
+
+pulse_loop:
+    out pins, 1       ; Output high (1)
+    set pins, 0       ; Directly set pins to low
+    jmp x-- pulse_loop [1]  ; Loop 'x' times for each state of the wave
+
+    jmp y-- square_loop [1]  ; Loop until all pulses are completed

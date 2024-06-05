@@ -1,0 +1,48 @@
+.program transition_counter
+    mov x !null         ; setup initial value    
+
+.wrap_target
+loop:
+    wait 0 pin 0        ; wait for low if high
+    wait 1 pin 0        ; wait for high
+    jmp x-- loop  ; decrement counter
+
+push_isr:
+    mov isr x           ; move count to ISR
+    push noblock        ; push the ISR to FIFO
+.wrap                   ; go back to .wrap_target
+
+% c-sdk {
+static inline void transition_counter_program_init(PIO pio, uint sm, uint offset, uint pin) {
+    pio_sm_config c = transition_counter_program_get_default_config(offset);
+
+    // set IN base pin to provided `pin` parameter, this is the reference clock
+    // pin+1 is the measured clock
+    sm_config_set_in_pins(&c, pin);
+
+    // Configure the state machine to use the specified input pin
+    sm_config_set_jmp_pin(&c, pin);
+    pio_gpio_init(pio, pin); // Initialize GPIO
+    gpio_set_dir(pin, GPIO_IN); // Set the GPIO direction as input
+
+    // load our config and start the program from the start
+    pio_sm_init(pio, sm, offset, &c);
+    pio_sm_set_enabled(pio, sm, true);
+    pio_sm_restart(pio, sm);
+}
+
+static inline int32_t transition_counter_get_count(PIO pio, uint sm)
+{
+    uint ret;
+    int n;
+
+    // if the FIFO has N entries, we fetch them to drain the FIFO,
+    // and return the latest value
+    n = pio_sm_get_rx_fifo_level(pio, sm) + 1;
+    while (n > 0) {
+        ret = pio_sm_get(pio, sm);
+        n--;
+    }
+    return ret;    
+}
+%}
