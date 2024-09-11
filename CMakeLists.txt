@@ -19,11 +19,16 @@ set(PICO_EXAMPLES_PATH ${PROJECT_SOURCE_DIR})
 pico_sdk_init()
 
 include(example_auto_set_url.cmake)
-# Add blink example
-# add_subdirectory(blink)
 
-# Add hello world example
-# add_subdirectory(hello_world)
+# Set the CMP0079 policy to NEW to avoid the warning
+if (POLICY CMP0079)
+  cmake_policy(SET CMP0079 NEW)
+endif()
+
+target_link_libraries(
+	pico_stdlib
+	INTERFACE pico_multicore
+	)
 
 add_compile_options(-Wall
         -Wno-format          # int != int32_t as far as the compiler is concerned because gcc has int32_t as long int
@@ -38,25 +43,4 @@ add_subdirectory(frequency-counter)
 add_subdirectory(pio-counter)
 add_subdirectory(pio-blink)
 add_subdirectory(pio-controlled-squarewave)
-# add_subdirectory(adc)
-# add_subdirectory(clocks)
-# add_subdirectory(cmake)
-# add_subdirectory(divider)
-# add_subdirectory(dma)
-# add_subdirectory(flash)
-# add_subdirectory(gpio)
-# add_subdirectory(i2c)
-# add_subdirectory(interp)
-# add_subdirectory(multicore)
-# add_subdirectory(picoboard)
-# add_subdirectory(pico_w)
-# add_subdirectory(pio)
-# add_subdirectory(pwm)
-# add_subdirectory(reset)
-# add_subdirectory(rtc)
-# add_subdirectory(spi)
-# add_subdirectory(system)
-# add_subdirectory(timer)
-# add_subdirectory(uart)
-# add_subdirectory(usb)
-# add_subdirectory(watchdog)
+add_subdirectory(src/panel_monitor_modbus)
